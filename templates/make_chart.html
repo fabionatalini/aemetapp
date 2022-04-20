@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>make chart</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="plotly_space" style="margin-left:20%;margin-right:20%;height:100%;"></div>
+<script type="text/javascript">
+    var tempem = {{ meteo_data_to_render.tempem }};
+    var precipi = {{ meteo_data_to_render.precipi }};
+    let station = '{{ meteo_data_to_render.station }}';
+    let from_to_dates = '{{ meteo_data_to_render.from_to_dates }}';
+    let chart_title = station+"<br>"+from_to_dates;
+    
+    const ylim_preci = Math.max(...precipi)+10;
+    const ylim_tempe = ylim_preci/2;
+
+    var trace1 = {
+      x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      y: tempem,
+      name: 'mean temperature',
+      type: 'scatter'
+    };
+
+    var trace2 = {
+      x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      y: precipi,
+      name: 'precipitation',
+      yaxis: 'y2',
+      type: 'scatter'
+    };
+
+    var data_to_plot = [trace1, trace2];
+
+    var layout = {
+      title: chart_title,
+      yaxis: {
+          title: 'mean temperature', 
+          range: [0, ylim_tempe],
+      },
+      yaxis2: {
+        title: 'precipitation',
+        range: [0, ylim_preci],
+        overlaying: 'y',
+        side: 'right'
+      }
+    };
+
+    Plotly.newPlot('plotly_space', data_to_plot, layout);
+</script>
+
+<div style="margin-left:20%;margin-right:20%;height:100%;">
+    <a id='descarga' download='daily_data.csv' type='text/csv'>Download daily data</a>
+</div>
+<script>
+    var csv = {{ meteo_data_to_render.daily_data | tojson }}
+    var data = new Blob([csv]);
+    var a = document.getElementById('descarga');
+    a.href = URL.createObjectURL(data);
+</script>
+
+<hr>
+<p>Go back to the <a href='/'>welcome page</a>.</p>
+
+</body>
+</html>
