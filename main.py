@@ -1,3 +1,4 @@
+
 from flask import Flask
 from flask import request
 from flask import render_template
@@ -67,7 +68,7 @@ def ask_for_dates(key,station):
     <input type="reset" value="Reset">
     </form><hr><p>Go back to the <a href='/'>welcome page</a>.</p>"""
     return html
- 
+
 #function to retrieve meteo data
 def retrieve_meteo_data(root_url,start,end,id_station,key):
     url_data = root_url+"fechaini/"+start+"T00:00:00UTC/fechafin/"+end+"T23:59:59UTC/estacion/"+id_station+"/"
@@ -131,6 +132,6 @@ def index():
                     return meteo_data_to_render
 
 
-                
-if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8080, debug=True)
+
+#if __name__ == "__main__":
+#    app.run(host="127.0.0.1", port=8080, debug=True)
